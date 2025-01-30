@@ -3,6 +3,7 @@
 //
 //     var foo: [4]u8 = [4]u8{ 1, 2, 3, 4 };
 //     var foo_slice: []u8 = foo[0..];
+//
 //     var foo_ptr: [*]u8 = &foo;
 //     var foo_slice_from_ptr: []u8 = foo_ptr[0..4];
 //
@@ -33,7 +34,7 @@ pub fn main() void {
     // we can CONVERT IT TO A SLICE. (Hint: we do know the length!)
     //
     // Please fix this line so the print statement below can print it:
-    const zen12_string: []const u8 = zen_manyptr;
+    const zen12_string: []const u8 = zen_manyptr[0..21];
 
     // Here's the moment of truth!
     std.debug.print("{s}\n", .{zen12_string});
