@@ -192,8 +192,8 @@ const TripItem = union(enum) {
             // Oops! The hermit forgot how to capture the union values
             // in a switch statement. Please capture each value as
             // 'p' so the print statements work!
-            .place => print("{s}", .{p.name}),
-            .path => print("--{}->", .{p.dist}),
+            .place => |p| print("{s}", .{p.name}),
+            .path => |p| print("--{}->", .{p.dist}),
         }
     }
 };
@@ -202,8 +202,8 @@ const TripItem = union(enum) {
 // entry is a Place discovered on the map along with the Path taken to
 // get there and the distance to reach it from the start point. If we
 // find a better Path to reach a Place (shorter distance), we update the
-// entry. Entries also serve as a "todo" list which is how we keep
-// track of which paths to explore next.
+// entry. Entries also serve as a "todo" list / which is how we keep
+// track of which paths / to explore next.
 const NotebookEntry = struct {
     place: *const Place,
     coming_from: ?*const Place,
@@ -255,7 +255,7 @@ const HermitsNotebook = struct {
             // dereference and optional value "unwrapping" look
             // together. Remember that you return the address with the
             // "&" operator.
-            if (place == entry.*.?.place) return entry;
+            if (place == entry.*.?.place) return &entry.*.?;
             // Try to make your answer this long:__________;
         }
         return null;
@@ -309,7 +309,7 @@ const HermitsNotebook = struct {
     //
     // Looks like the hermit forgot something in the return value of
     // this function. What could that be?
-    fn getTripTo(self: *HermitsNotebook, trip: []?TripItem, dest: *Place) void {
+    fn getTripTo(self: *HermitsNotebook, trip: []?TripItem, dest: *Place) TripError!void {
         // We start at the destination entry.
         const destination_entry = self.getEntry(dest);
 
@@ -321,13 +321,13 @@ const HermitsNotebook = struct {
             return TripError.Unreachable;
         }
 
-        // Variables hold the entry we're currently examining and an
-        // index to keep track of where we're appending trip items.
+        // Variables hold the entry / we're currently examining / and / an
+        // index / to keep track of / where we're appending trip items.
         var current_entry = destination_entry.?;
         var i: u8 = 0;
 
-        // At the end of each looping, a continue expression increments
-        // our index. Can you see why we need to increment by two?
+        // At the end of each looping, a continue expression / increments
+        // our index. Can you see / why we need to increment by two?
         while (true) : (i += 2) {
             trip[i] = TripItem{ .place = current_entry.place };
 
@@ -376,9 +376,9 @@ pub fn main() void {
     var notebook = HermitsNotebook{};
     var working_note = NotebookEntry{
         .place = start,
-        .coming_from = null,
-        .via_path = null,
-        .dist_to_reach = 0,
+        .coming_from = null, // coming -> place로 갈때
+        .via_path = null, // 사용된 path
+        .dist_to_reach = 0, // 최소 거리
     };
     notebook.checkNote(working_note);
 
