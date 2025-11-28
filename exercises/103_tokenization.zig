@@ -136,7 +136,8 @@ pub fn main() !void {
     ;
 
     // now the tokenizer, but what do we need here?
-    var it = std.mem.tokenizeAny(u8, poem, ???);
+    // 구분자에 ';', ',', '!', 공백(' '), 그리고 개행('\n')을 포함시킵니다.
+    var it = std.mem.tokenizeAny(u8, poem, " ,;!\n");
 
     // print all words and count them
     var cnt: usize = 0;
